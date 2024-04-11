@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS fitrack_db;
+CREATE DATABASE fitrack_db;
