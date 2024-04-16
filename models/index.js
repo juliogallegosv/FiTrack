@@ -25,3 +25,21 @@ User.hasMany(Comment, {
 Comment.belongsTo(User, {
     foreignKey: "user_id"
 });
+
+// ! There is good chance these associations don't work
+
+User.hasMany(User, {
+    foreignKey: "followers"
+});
+
+User.belongsTo(User, {
+    foreignKey: "followers"
+});
+
+User.hasMany(User, {
+    foreignKey: "following"
+});
+
+User.belongsTo(User, {
+    foreignKey: "following"
+})
