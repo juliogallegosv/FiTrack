@@ -27,8 +27,6 @@ Comment.belongsTo(User, {
     foreignKey: "user_id"
 });
 
-// ! There is good chance these associations don't work
-
 User.belongsToMany(User, {
     as: "Followers",
     through: UserFollower,
