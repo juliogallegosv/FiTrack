@@ -1,0 +1,17 @@
+{
+    "name": "FiTrack",
+    "version": "1.0.0",
+    "description": "A tracker app for endurance athletes where they can also share their achievements with others",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": { 
+      "dotenv": "^8.2.0",
+      "express": "^4.17.1",
+      "mysql2": "^2.1.0",
+      "sequelize": "^5.21.7",
+      "nodemailer": "^6.7.2"
+    }
+  }
+  
