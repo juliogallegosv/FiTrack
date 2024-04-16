@@ -30,8 +30,7 @@ Comment.init(
             allowNull: false,
             references: {
                 model: "Post"
-            }
-        },
+        }
     },
     {
         sequelize,
