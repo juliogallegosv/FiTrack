@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../config/connection")
+const sequelize = require("../config/conection")
 const bcrypt = require("bcrypt");
 
 class User extends Model {
@@ -43,18 +43,6 @@ User.init(
         },
         private: {
             type: DataTypes.BOOLEAN,
-        },
-        followers: {
-            type: DataTypes.INT,
-            references: {
-                model: "User"
-            }
-        },
-        following: {
-            type: DataTypes.INT,
-            references: {
-                model: "User"
-            }
         }
     }, 
     {
@@ -63,6 +51,10 @@ User.init(
                 data.password = await bcrypt.hash(data.password, 10);
                 return data;
             }
-        }    
+        },
+        sequelize    
     }
+
 )
+
+module.exports = User;
