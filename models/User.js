@@ -41,7 +41,7 @@ User.init(
         country: {
             type: DataTypes.STRING,
         },
-        country: {
+        private: {
             type: DataTypes.BOOLEAN,
         },
         followers: {
