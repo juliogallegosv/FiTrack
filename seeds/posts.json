@@ -1,0 +1,24 @@
+[
+    {
+        "title": "First Post",
+        "content": "This is the content of the first post.",
+        "sport": "Running",
+        "distance": 5,
+        "duration": 30,
+        "date": "2024-04-15T00:00:00.000Z",
+        "location": "Central Park",
+        "private": false,
+        "user_id": 1
+    },
+    {
+        "title": "Second Post",
+        "content": "This is the content of the second post.",
+        "sport": "Cycling",
+        "distance": 15,
+        "duration": 60,
+        "date": "2024-04-14T00:00:00.000Z",
+        "location": "Golden Gate Bridge",
+        "private": true,
+        "user_id": 2
+    }
+]
