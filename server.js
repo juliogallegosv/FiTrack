@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const { emailUser, emailPass } = require('./config/emailConfig'); // Import email configuration
 
+const sequelize = require('./config/connection');
+
 // Create an Express app
 const app = express();
 
@@ -49,10 +51,10 @@ app.post('/send-email', (req, res) => {
 });
 
 // Set the port for the server to listen on
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () => console.log('Now listening in http://localhost:3001'));
 });
 
