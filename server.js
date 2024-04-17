@@ -4,13 +4,21 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const { emailUser, emailPass } = require('./config/email.Config'); // Import email configuration
 const sequelize = require ("./config/conection.js")
-
+const routes = require ('./controllers')
+const path = require('path')
 const exphbs = require('express-handlebars'); // Import express-handlebars
 const app = express();
 
+const hbs = exphbs.create();
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 // Body parser middleware to parse incoming JSON requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use(routes)
 
 // Define a route for sending emails
 app.post('/send-email', (req, res) => {
