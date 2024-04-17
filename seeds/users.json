@@ -7,9 +7,7 @@
         "description": "Description for User One",
         "gender": "Male",
         "country": "Country One",
-        "private": false,
-        "followers": [2, 3],
-        "following": [3]
+        "private": false
     },
     {
         "username": "user2",
@@ -19,9 +17,7 @@
         "description": "Description for User Two",
         "gender": "Female",
         "country": "Country Two",
-        "private": false,
-        "followers": null,
-        "following": [1]
+        "private": false
     },
     {
         "username": "user3",
@@ -31,8 +27,6 @@
         "description": "Description for User Three",
         "gender": "Non Binary",
         "country": "Country Three",
-        "private": true,
-        "followers": [2],
-        "following": null
+        "private": true
     }
 ]
