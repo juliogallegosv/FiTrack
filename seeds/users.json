@@ -3,7 +3,7 @@
         "username": "user1",
         "password": "password1",
         "email": "user1@example.com",
-        "name": "User One",
+        "name": "MEX",
         "description": "Description for User One",
         "gender": "Male",
         "country": "Country One",
@@ -16,7 +16,8 @@
         "name": "User Two",
         "description": "Description for User Two",
         "gender": "Female",
-        "country": "Country Two",
+        "country": "USA",
+        "units": true,
         "private": false
     },
     {
@@ -26,7 +27,7 @@
         "name": "User Three",
         "description": "Description for User Three",
         "gender": "Non Binary",
-        "country": "Country Three",
+        "units": false,
         "private": true
     }
 ]

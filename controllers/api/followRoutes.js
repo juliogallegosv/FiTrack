@@ -44,8 +44,6 @@ router.delete("/", async (req, res) => {
 
         if (destroyed) {
             res.status(200).json({ message: "Successfully unfollowed" })
-        } else {
-            res.status(400).json({ message: "Error: user doesn't exist" });
         }
 
     } catch (err) {
@@ -53,3 +51,5 @@ router.delete("/", async (req, res) => {
         res.status(400).json(err);
     }
 });
+
+module.exports = router;
