@@ -1,17 +1,49 @@
-<h2>Login</h2>
 
-<form class="form login-form">
-  <div class="form-group">
-    <label for="email-login">email:</label>
-    <input class="form-input" type="text" id="email-login" />
-  </div>
-  <div class="form-group">
-    <label for="password-login">password:</label>
-    <input class="form-input" type="password" id="password-login" />
-  </div>
-  <div class="form-group">
-    <button class="btn btn-primary" type="submit">login</button>
-  </div>
+  <br>
+  
+    <header>
+        <h1 class="has-text-centered title is-1">FiTrack</h1>
+    </header>
+    
+
+<br>
+<form>
+<!--user enters their email-->
+    <section>
+      <div class="columns is-centered is-vcentered">
+        <div class="column is-half">
+          <input class="input is-info is-fullwidth" type="email" id="email-login" placeholder="email"></input> 
+        </div>
+      </div>
+    </section>
+        
+    <br>
+    
+<!--user enters their password-->
+    <section>
+      <div class="columns is-centered is-vcentered">
+        <div class="column is-half">
+          <input class= "input is-info is-fullwidth" id="password-login" type="password" placeholder="password"></input> 
+        </div>
+      </div>
+  
+    </section>   
+    
+   <br> 
+
+<!--log in button-->   
+    <section>
+      <div class="columns is-centered is-vcentered">
+        <div class="column is-half">
+          <button id="sumbitButton" class="login-form button is-medium container is-info is-fullwidth" type="su">Log In</button>
+        </div>
+      </div>
+    </section>
+
 </form>
 
+
+
+
 <script src="/js/login.js"></script>
+
