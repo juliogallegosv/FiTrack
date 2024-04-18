@@ -13,7 +13,11 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const app = express();
 
 // Set up Handlebars view engine
-const hbs = exphbs.create();
+const hbs = exphbs.create({
+    helpers: {
+        formatTime(date) { return date.toLocaleDateString() }
+    }
+});
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
@@ -26,10 +30,7 @@ app.use(session({
     }),
     resave: false,
     proxy: true,
-    saveUninitialized: true,
-    cookie: {
-        sameSite: "none"
-    }
+    saveUninitialized: true
 }));
 
 // Body parser middleware to parse incoming JSON requests

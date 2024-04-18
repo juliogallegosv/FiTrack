@@ -36,7 +36,16 @@ router.get("/profile", authCheck, async (req, res) => {
         raw: true
     });
 
-    res.render("myProfile", user);
+    var post = await Post.findAll({
+        where: {
+            user_id: req.session.user_id
+        },
+        raw: true
+    });
+
+    console.log(post);
+
+    res.render("myProfile", {user, post});
 
 });
 
