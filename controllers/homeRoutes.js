@@ -1,5 +1,6 @@
 const router = require("express").Router()
-const { User } = require('../models/User');
+const { User, Post } = require('../models');
+
 
 router.get("/login", (req, res) => {
     res.render("login");
@@ -13,20 +14,61 @@ router.get("/about", (req, res) => {
     res.render("about");
 });
 
-// router.get("/", (req, res) => {
-//     res.render("home");
-// });
+router.get("/", async (req, res) => {
 
-router.get("/profile", (req, res) => {
-    res.render("myProfile");
+    var post = await Post.findAll({ raw: true });
+
+    post = post.slice(-5)
+
+    res.render("home", post);
+
+});
+
+router.get("/profile", async (req, res) => {
+
+    var user = await User.findOne({
+        where: {
+            id: req.session.user_id
+        },
+        raw: true
+    });
+
+    res.render("myProfile", user);
+
 });
 
 router.get("/create", (req, res) => {
     res.render("create");
 });
 
-router.get("/profile/:id", (req, res) => {
-    res.render("profile");
+router.get("/profile/:id", async (req, res) => {
+
+    var user = await User.findOne({
+        // include: {
+            //! IMPORTANT MASSIVE SECURITY VULNERABILITY, PRIVACY CHECK STILL NEEDS TO BE DONE AND PASSWORD HASH NOT SENT
+        // },
+        where: {
+            id: req.params.id
+        },
+        raw: true
+    });
+    
+    var post = await Post.findAll({
+        where: {
+            user_id: req.params.id
+        },
+        raw: true
+    });
+
+    var comment = await Comment.findAll({
+        where: {
+            blog_id: post.blog_id
+        },
+        raw: true
+    });
+
+    res.render("profile", {user, post, comment});
+
 });
 
 router.get("/following", (req, res) => {
@@ -37,8 +79,17 @@ router.get("/followers", (req, res) => {
     res.render("followers");
 });
 
-router.get("/aboutedit", (req, res) => {
-    res.render("aboutEdit");
+router.get("/aboutedit", async (req, res) => {
+
+    var user = await User.findOne({
+        where: {
+            id: req.session.user_id
+        },
+        raw: true
+    });
+
+    res.render("aboutEdit", user);
+
 });
 
 const users = [
@@ -56,7 +107,6 @@ router.get("/search", async (req, res) => {
     res.render("search-users")
     return res.render('search-users', users);
 });
-=======
 
 // Update the "/" route to redirect to "/login"
 router.get("/", (req, res) => {
