@@ -16,7 +16,7 @@ const aboutFormHandler = async (event) => {
         },
       });
   
-console.log(gender)
+
 
 
       if (response.ok) {
@@ -26,9 +26,7 @@ console.log(gender)
       }
     }
   };
-  
-console.log(gender)
-  
+
   document
     .querySelector('.about-form')
     .addEventListener('submit', aboutFormHandler);
