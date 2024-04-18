@@ -56,21 +56,22 @@ router.get("/profile/:id", authCheck, async (req, res) => {
         raw: true
     });
     if (user.private) {
-        res.render("profile", { private })
+        res.render("profile", { private: true });
     } else {
+        var isFollowed = await UserFollower.findOne({
+            where:{
+                follower_id: req.session.user_id,
+                following_id: req.params.id
+            },
+            raw: true
+        }) ? true : false;
         var post = await Post.findAll({
             where: {
                 user_id: req.params.id
             },
             raw: true
         });
-        var comment = await Comment.findAll({
-            where: {
-                blog_id: post.blog_id
-            },
-            raw: true
-        });
-        res.render("profile", { user, post, comment });
+        res.render("profile", { user, post, isFollowed});
     }
 });
 
@@ -104,6 +105,16 @@ router.get("/aboutedit", authCheck, async (req, res) => {
         raw: true
     });
     res.render("aboutEdit", {user});
+});
+
+router.get("/post/:id", authCheck, async (req, res) => {
+    var post = await Post.findOne({
+        where: {
+            id: req.params.id
+        },
+        raw: true
+    });
+    res.render("post", {post});
 });
 
 module.exports = router;

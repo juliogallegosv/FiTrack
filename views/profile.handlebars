@@ -36,20 +36,21 @@
                 </div>
                 <div class="level-right">
                     <div class="buttons">
-                        <a href="/followers" class="button is-info">Followers ({{user.followersCount}})</a>
-                        <a href="/following" class="button is-info">Following ({{user.followingCount}})</a>
+                        {{#if isFollowed}}<a id="unfollowBtn" class="button is-info">Unfollow</a>
+                        {{else}}<a id="followBtn" class="button is-info">Follow</a>
+                        {{/if}}
                     </div>
                 </div>
             </div>
             <div class="content">
-                <h2>{{user.fullName}}</h2>
+                <h2>{{user.name}}</h2>
                 <p>Username: <span>{{user.username}}</span></p>
                 <p>Gender: <span>{{user.gender}}</span></p>
                 <p>Country: <span>{{user.country}}</span></p>
                 <p>Description: {{user.description}}</p>
             </div>
             
-            <!-- Add Post Section -->
+            {{!-- <!-- Add Post Section -->
             <div class="field">
                 <label class="label">Add Post</label>
                 <div class="control">
@@ -62,31 +63,27 @@
                 <div class="control">
                     <button class="button is-info">Add Post</button>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Recent Posts Section -->
             <div class="field">
                 <label class="label">Recent Posts:</label>
                 <div class="content">
-                    {{#each user.recentPosts}}
-                        <div class="box">
-                            <p>{{this}}</p>
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Add Comment">
-                                </div>
-                            </div>
-                        </div>
+                    {{#each post}}
+                    {{> postCard}}
                     {{/each}}
                 </div>
             </div>
 
             <!-- Home Button -->
             <div class="buttons is-centered">
-                <a href="/home" class="button is-success">Home</a>
+                <a href="/" class="button is-success">Home</a>
             </div>
         </div>
     </section>
 
 </body>
 </html>
+
+<script src="/js/profile.js"></script>
+<script src="/js/post.js"></script>
