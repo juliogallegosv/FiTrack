@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiTrack - Workout</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <h1 class="title is-4">FiTrack</h1>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <button class="button is-text">
+                            <span class="icon">
+                                <i class="fas fa-arrow-left"></i>
+                            </span>
+                            <span>Back</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Workout Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="subtitle has-text-centered">Track today's workout</h2>
+
+            <!-- Workout Menu -->
+            <div class="dropdown is-hoverable">
+                <div class="dropdown-trigger">
+                    <button class="button" aria-haspopup="true" aria-controls="workout-menu">
+                        <span>Workout</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="workout-menu" role="menu">
+                    <div class="dropdown-content">
+                        <a href="#" class="dropdown-item">Running</a>
+                        <a href="#" class="dropdown-item">Cycling</a>
+                        <a href="#" class="dropdown-item">Swimming</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Inputs -->
+            <div class="columns is-centered is-vcentered">
+                <div class="column is-half">
+                    <div class="field is-horizontal">
+                        <div class="field-body">
+                            <div class="field">
+                                <label class="label">hr</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Enter hours">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">min</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Enter minutes">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distance Input -->
+            <div class="columns is-centered is-vcentered">
+                <div class="column is-half">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Enter distance</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Distance">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select">
+                                    <select>
+                                        <option>kilometers</option>
+                                        <option>miles</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post Button -->
+            <div class="columns is-centered is-vcentered">
+                <div class="column is-half">
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-success is-fullwidth">Post!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

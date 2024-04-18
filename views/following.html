@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiTrack - Following</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <h1 class="title is-4">FiTrack</h1>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <button class="button is-text">
+                            <span class="icon">
+                                <i class="fas fa-arrow-left"></i>
+                            </span>
+                            <span>Back</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Following Section -->
+    <section class="section">
+        <div class="container">
+            <div class="buttons is-centered">
+                <button class="button is-info is-large">Following ({{user.followingCount}})</button>
+                <button class="button is-info is-large">Followers ({{user.followersCount}})</button>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input class="input" type="text" placeholder="Search">
+                </div>
+            </div>
+            <div class="content">
+                <h2>Users You're Following</h2>
+                <ul>
+                    {{#each followingUsers}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
