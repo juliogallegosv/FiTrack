@@ -13,9 +13,9 @@ router.get("/about", (req, res) => {
     res.render("about");
 });
 
-router.get("/", (req, res) => {
-    res.render("home");
-});
+// router.get("/", (req, res) => {
+//     res.render("home");
+// });
 
 router.get("/profile", (req, res) => {
     res.render("myProfile");
@@ -40,6 +40,7 @@ router.get("/followers", (req, res) => {
 router.get("/aboutedit", (req, res) => {
     res.render("aboutEdit");
 });
+
 const users = [
     {
       username: 'Cheese',
@@ -54,6 +55,12 @@ router.get("/search", async (req, res) => {
     //const users = await User.findAll();
     res.render("search-users")
     return res.render('search-users', users);
+});
+=======
+
+// Update the "/" route to redirect to "/login"
+router.get("/", (req, res) => {
+    res.redirect("/login");
 });
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Post } = require('../../models');
+const { Post, Comment } = require('../../models');
 
 //TODO: Check if logged in middleware
 router.post("/", async (req, res) => {
@@ -7,10 +7,10 @@ router.post("/", async (req, res) => {
 
         req.body.user_id = req.session.user_id;
 
-        var post = await Post.create(req.body);
+        var comment = await Comment.create(req.body);
 
-        if (post) {
-            res.status(200).json({ message: "Successful post creation" });
+        if (comment) {
+            res.status(200).json({ message: "Successful comment creation" });
         }
 
     } catch (err) {
@@ -23,18 +23,18 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
     try {
 
-        var post = await Post.findOne({
+        var comment = await Comment.findOne({
             where: {
                 id: req.body.id,
-                user_id: req.session.user_id
+                user: req.session.user_id
             }
         });
 
-        if (post) {
-            post.set(req.body);
-            var saved = post.save();
+        if (comment) {
+            comment.set(req.body);
+            var saved = comment.save();
             if (saved) {
-                res.status(200).json({ message: "Successfully updated post"});
+                res.status(200).json({ message: "Successfully updated comment"});
             }
         }
 
@@ -48,17 +48,17 @@ router.put("/", async (req, res) => {
 router.delete("/", async (req, res) => {
     try {
 
-        var post = await Post.findOne({
+        var comment = await Comment.findOne({
             where: {
                 id: req.body.id,
-                user_id: req.session.user_id
+                user: req.session.user_id
             }
         });
-
-        var destroyed = await post.destroy()
+        
+        var destroyed = await comment.destroy();
 
         if (destroyed) {
-            res.status(200).json({ message: "Successfully deleted post"});
+            res.status(200).json({ message: "Successfully deleted comment" });
         }
 
     } catch (err) {
