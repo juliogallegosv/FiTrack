@@ -1,117 +1,82 @@
-const router = require("express").Router()
+const router = require("express").Router();
 const { User, Post } = require('../models');
 
-
-router.get("/login", (req, res) => {
+// Home (login) route
+router.get("/", (req, res) => {
     res.render("login");
 });
 
+// Sign up route
 router.get("/signup", (req, res) => {
     res.render("signup");
 });
 
+// About you route
 router.get("/about", (req, res) => {
     res.render("about");
 });
 
-router.get("/", async (req, res) => {
-
-    var post = await Post.findAll({ raw: true });
-
-    post = post.slice(-5)
-
-    res.render("home", post);
-
+// Dashboard (feed) route
+router.get("/dashboard", async (req, res) => {
+    try {
+        const posts = await Post.findAll({ raw: true });
+        const latestPosts = posts.slice(-5); // Get the latest 5 posts
+        res.render("feed", { posts: latestPosts }); // Render the feed view with the latest posts
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching posts');
+    }
 });
 
+// Profile route
 router.get("/profile", async (req, res) => {
-
-    var user = await User.findOne({
-        where: {
-            id: req.session.user_id
-        },
-        raw: true
-    });
-
-    res.render("myProfile", user);
-
+    try {
+        const user = await User.findByPk(req.session.user_id, { raw: true });
+        res.render("myProfile", user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching user profile');
+    }
 });
 
+// Add workout route
 router.get("/create", (req, res) => {
     res.render("create");
 });
 
+// View other profile route
 router.get("/profile/:id", async (req, res) => {
-
-    var user = await User.findOne({
-        // include: {
-            //! IMPORTANT MASSIVE SECURITY VULNERABILITY, PRIVACY CHECK STILL NEEDS TO BE DONE AND PASSWORD HASH NOT SENT
-        // },
-        where: {
-            id: req.params.id
-        },
-        raw: true
-    });
-    
-    var post = await Post.findAll({
-        where: {
-            user_id: req.params.id
-        },
-        raw: true
-    });
-
-    var comment = await Comment.findAll({
-        where: {
-            blog_id: post.blog_id
-        },
-        raw: true
-    });
-
-    res.render("profile", {user, post, comment});
-
+    try {
+        const user = await User.findByPk(req.params.id, { raw: true });
+        const posts = await Post.findAll({ where: { user_id: req.params.id }, raw: true });
+        // Assuming Comment model is imported and defined
+        const comments = await Comment.findAll({ where: { blog_id: posts.map(post => post.blog_id) }, raw: true });
+        res.render("profile", { user, posts, comments });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching profile');
+    }
 });
 
+// View following route
 router.get("/following", (req, res) => {
     res.render("following");
 });
 
+// View followers route
 router.get("/followers", (req, res) => {
     res.render("followers");
 });
 
+// About you (edit) route
 router.get("/aboutedit", async (req, res) => {
-
-    var user = await User.findOne({
-        where: {
-            id: req.session.user_id
-        },
-        raw: true
-    });
-
-    res.render("aboutEdit", user);
-
-});
-
-
-  router.get('/home',  async (req, res) => {
     try {
-      const userData = await User.findAll({
-        attributes: { exclude: ['password'] }
-      });
-  
-      const users = userData.map((user) => user.get({ plain: true }));
-  console.log(users)
-      res.render('home', {
-        users,
-      });
-    } catch (err) {
-      res.status(500).json(err);
+        const user = await User.findByPk(req.session.user_id, { raw: true });
+        res.render("aboutEdit", user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching user data');
     }
-  });
-
-// Update the "/" route to redirect to "/login"
-router.get("/", (req, res) => {
-    res.redirect("/login");
 });
 
 module.exports = router;
