@@ -7,6 +7,8 @@ const sequelize = require ("./config/conection.js")
 const routes = require ('./controllers')
 const path = require('path')
 const exphbs = require('express-handlebars'); // Import express-handlebars
+const session = require("express-session")
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const app = express();
 
@@ -15,6 +17,20 @@ const hbs = exphbs.create();
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
+
+//Authentication
+app.use(session({
+    secret: "shouldreallychangethistoa.envvar",
+    store: new SequelizeStore({
+        db: sequelize,
+    }),
+    resave: false,
+    proxy: true,
+    saveUninitialized: true,
+    cookie: {
+        sameSite: "none"
+    }
+}));
 
 // Body parser middleware to parse incoming JSON requests
 app.use(bodyParser.json());
@@ -25,10 +41,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
-// Home (login) route
-app.get('/', (req, res) => {
-  res.render('login'); // Render the login view
-});
 
 // Define a route for sending emails
 app.post('/send-email', (req, res) => {

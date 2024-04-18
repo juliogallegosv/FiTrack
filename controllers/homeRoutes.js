@@ -1,6 +1,6 @@
 const router = require("express").Router()
-const { User, Post } = require('../models');
-
+const { User, Post, UserFollower } = require('../models');
+const authCheck = require("../utils/auth");
 
 router.get("/login", (req, res) => {
     res.render("login");
@@ -14,19 +14,22 @@ router.get("/about", (req, res) => {
     res.render("about");
 });
 
-router.get("/", async (req, res) => {
+router.get("/", authCheck, async (req, res) => {
 
     var post = await Post.findAll({ raw: true });
 
-    post = post.slice(-5)
+    post = post.slice(-5);
 
     res.render("home", post);
 
 });
 
-router.get("/profile", async (req, res) => {
+router.get("/profile", authCheck, async (req, res) => {
 
     var user = await User.findOne({
+        attributes: { 
+            exclude: ['password'] 
+        },
         where: {
             id: req.session.user_id
         },
@@ -37,49 +40,78 @@ router.get("/profile", async (req, res) => {
 
 });
 
-router.get("/create", (req, res) => {
+router.get("/create", authCheck, (req, res) => {
     res.render("create");
 });
 
-router.get("/profile/:id", async (req, res) => {
+router.get("/profile/:id", authCheck, async (req, res) => {
 
     var user = await User.findOne({
-        // include: {
-            //! IMPORTANT MASSIVE SECURITY VULNERABILITY, PRIVACY CHECK STILL NEEDS TO BE DONE AND PASSWORD HASH NOT SENT
-        // },
+        attributes: { 
+            exclude: ['password'] 
+        },
         where: {
             id: req.params.id
         },
         raw: true
     });
     
-    var post = await Post.findAll({
+    if (user.private){
+        res.render("profile", {private})
+    } else {
+
+        var post = await Post.findAll({
+            where: {
+                user_id: req.params.id
+            },
+            raw: true
+        });
+
+        var comment = await Comment.findAll({
+            where: {
+                blog_id: post.blog_id
+            },
+            raw: true
+        });
+
+        res.render("profile", {user, post, comment});
+
+    }
+});
+
+router.get("/following", authCheck, async (req, res) => {
+
+    var followings = await UserFollower.findAndCountAll({
+        attributes: { 
+            exclude: ['password'] 
+        },
         where: {
-            user_id: req.params.id
+            following_id: req.session.user_id
         },
         raw: true
     });
 
-    var comment = await Comment.findAll({
+    res.render("following", followings);
+
+});
+
+router.get("/followers", authCheck, async(req, res) => {
+
+    var followers = await UserFollower.findAndCountAll({
+        attributes: { 
+            exclude: ['password'] 
+        },
         where: {
-            blog_id: post.blog_id
+            follower_id: req.session.user_id
         },
         raw: true
     });
 
-    res.render("profile", {user, post, comment});
+    res.render("followers", followers);
 
 });
 
-router.get("/following", (req, res) => {
-    res.render("following");
-});
-
-router.get("/followers", (req, res) => {
-    res.render("followers");
-});
-
-router.get("/aboutedit", async (req, res) => {
+router.get("/aboutedit", authCheck, async (req, res) => {
 
     var user = await User.findOne({
         where: {
@@ -93,25 +125,25 @@ router.get("/aboutedit", async (req, res) => {
 });
 
 
-  router.get('/home',  async (req, res) => {
-    try {
-      const userData = await User.findAll({
-        attributes: { exclude: ['password'] }
-      });
+//   router.get('/home',  async (req, res) => {
+//     try {
+//       const userData = await User.findAll({
+//         attributes: { exclude: ['password'] }
+//       });
   
-      const users = userData.map((user) => user.get({ plain: true }));
-  console.log(users)
-      res.render('home', {
-        users,
-      });
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
+//       const users = userData.map((user) => user.get({ plain: true }));
+//       console.log(users)
+//       res.render('home', {
+//         users,
+//       });
+//     } catch (err) {
+//       res.status(500).json(err);
+//     }
+//   });
 
 // Update the "/" route to redirect to "/login"
-router.get("/", (req, res) => {
-    res.redirect("/login");
-});
+// router.get("/", (req, res) => {
+//     res.redirect("/login");
+// });
 
 module.exports = router;
