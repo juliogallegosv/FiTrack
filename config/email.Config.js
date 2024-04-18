@@ -1,5 +1,7 @@
 // Email configuration
+require('dotenv').config();
+
 module.exports = {
-    emailUser: 'user@gmail.com',
-    emailPass: 'gmail-password'
-  };
+    emailUser: process.env.EMAIL_USER,
+    emailPass: process.env.EMAIL_PASS
+};

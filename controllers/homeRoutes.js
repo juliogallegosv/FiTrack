@@ -1,5 +1,6 @@
 const router = require("express").Router()
-const { User, Post} = require('../models');
+const { User, Post } = require('../models');
+
 
 router.get("/login", (req, res) => {
     res.render("login");
@@ -91,5 +92,25 @@ router.get("/aboutedit", async (req, res) => {
 
 });
 
+const users = [
+    {
+      username: 'Cheese',
+    },
+    {
+      username: 'Name One',
+   }
+  ];
+
+router.get("/search", async (req, res) => {
+    
+    //const users = await User.findAll();
+    res.render("search-users")
+    return res.render('search-users', users);
+});
+
+// Update the "/" route to redirect to "/login"
+router.get("/", (req, res) => {
+    res.redirect("/login");
+});
 
 module.exports = router;
