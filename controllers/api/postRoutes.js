@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { Post } = require('../../models');
+const authCheck = require("../../utils/auth");
 
-//TODO: Check if logged in middleware
 router.post("/", async (req, res) => {
     try {
 
@@ -19,8 +19,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-//TODO: Check if logged in middleware
-router.put("/", async (req, res) => {
+router.put("/", authCheck, async (req, res) => {
     try {
 
         var post = await Post.findOne({
@@ -44,8 +43,7 @@ router.put("/", async (req, res) => {
     }
 });
 
-//TODO: Check if logged in middleware
-router.delete("/", async (req, res) => {
+router.delete("/", authCheck, async (req, res) => {
     try {
 
         var post = await Post.findOne({
