@@ -1,4 +1,5 @@
 const router = require("express").Router()
+const { User } = require('../models/User');
 
 router.get("/login", (req, res) => {
     res.render("login");
@@ -39,6 +40,20 @@ router.get("/followers", (req, res) => {
 router.get("/aboutedit", (req, res) => {
     res.render("aboutEdit");
 });
+const users = [
+    {
+      username: 'Cheese',
+    },
+    {
+      username: 'Name One',
+   }
+  ];
 
+router.get("/search", async (req, res) => {
+    
+    //const users = await User.findAll();
+    res.render("search-users")
+    return res.render('search-users', users);
+});
 
 module.exports = router;
