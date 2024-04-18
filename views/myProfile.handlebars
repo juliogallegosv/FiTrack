@@ -68,22 +68,15 @@
             <div class="field">
                 <label class="label">Recent Posts:</label>
                 <div class="content">
-                    {{#each user.recentPosts}}
-                        <div class="box">
-                            <p>{{this}}</p>
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Add Comment">
-                                </div>
-                            </div>
-                        </div>
+                    {{#each user.posts}}
+                        <p>{{this}}</p>
                     {{/each}}
                 </div>
             </div>
 
-            <!-- Home Button -->
+            <!-- Logout Button -->
             <div class="buttons is-centered">
-                <a href="/home" class="button is-success">Home</a>
+                <button class="button is-danger">Logout</button>
             </div>
         </div>
     </section>
