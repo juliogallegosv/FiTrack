@@ -12,9 +12,9 @@ router.get("/about", (req, res) => {
     res.render("about");
 });
 
-router.get("/", (req, res) => {
-    res.render("home");
-});
+// router.get("/", (req, res) => {
+//     res.render("home");
+// });
 
 router.get("/profile", (req, res) => {
     res.render("myProfile");
@@ -38,6 +38,11 @@ router.get("/followers", (req, res) => {
 
 router.get("/aboutedit", (req, res) => {
     res.render("aboutEdit");
+});
+
+// Update the "/" route to redirect to "/login"
+router.get("/", (req, res) => {
+    res.redirect("/login");
 });
 
 

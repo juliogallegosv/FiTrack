@@ -7,18 +7,28 @@ const sequelize = require ("./config/conection.js")
 const routes = require ('./controllers')
 const path = require('path')
 const exphbs = require('express-handlebars'); // Import express-handlebars
+
 const app = express();
 
+// Set up Handlebars view engine
 const hbs = exphbs.create();
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
+
 // Body parser middleware to parse incoming JSON requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Serve static files (e.g., CSS, images)
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(routes);
 
-app.use(routes)
+// Home (login) route
+app.get('/', (req, res) => {
+  res.render('login'); // Render the login view
+});
 
 // Define a route for sending emails
 app.post('/send-email', (req, res) => {
@@ -41,7 +51,8 @@ app.post('/send-email', (req, res) => {
     html: `
       <h1>Hello, ${firstName} ${lastName}!</h1>
       <p>Thank you for creating a FiTrack account! We hope you get the most of the app and feel inspired in every step of your journey</p>
-      <p>Welcome again to the FiTrack family, happy Training!</p>
+      <p>Welcome again to the <b>FiTrack</b> family, happy training!</p>
+      <h2>🚵‍♀️ 🏊‍♂️ 🏃‍♂️</h2>
     `
   };
 
@@ -61,6 +72,6 @@ app.post('/send-email', (req, res) => {
 const PORT = process.env.PORT || 3001;
 
 // Start the server
-sequelize.sync ({force: false }).then(() => {
-  app.listen(PORT, () => console.log('Now listening in port http://localhost:3001'));
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () => console.log(`Now listening on port http://localhost:${PORT}`));
 });
