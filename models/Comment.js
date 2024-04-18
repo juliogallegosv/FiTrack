@@ -13,10 +13,17 @@ Comment.init(
         },
         content: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: {
+                    args: [4, 128],
+                    msg: "Please write a comment between 4 and 128 characters long"
+                }
+            }
         },
         private: {
-            type: DataTypes.BOOLEAN
+            type: DataTypes.BOOLEAN,
+            allowNull: true
         },
         user_id: {
             type: DataTypes.INTEGER,
