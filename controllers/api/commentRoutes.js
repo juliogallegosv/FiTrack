@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const { Post, Comment } = require('../../models');
+const authCheck = require("../../utils/auth");
 
-//TODO: Check if logged in middleware
-router.post("/", async (req, res) => {
+router.post("/", authCheck, async (req, res) => {
     try {
 
         req.body.user_id = req.session.user_id;
@@ -19,8 +19,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-//TODO: Check if logged in middleware
-router.put("/", async (req, res) => {
+router.put("/", authCheck, async (req, res) => {
     try {
 
         var comment = await Comment.findOne({
@@ -44,8 +43,7 @@ router.put("/", async (req, res) => {
     }
 });
 
-//TODO: Check if logged in middleware
-router.delete("/", async (req, res) => {
+router.delete("/", authCheck, async (req, res) => {
     try {
 
         var comment = await Comment.findOne({

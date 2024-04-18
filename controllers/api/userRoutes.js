@@ -1,12 +1,13 @@
 const router = require("express").Router();
 const { User } = require('../../models');
+const authCheck = require("../../utils/auth");
 
 router.post("/login", async (req, res) => {
     try {
 
         var user = await User.findOne({
             where: {
-                username: req.body.email
+                email: String(req.body.email).trim()
             }
         });
 
@@ -37,7 +38,7 @@ router.post("/signup", async (req, res) => {
             email: req.body.email,
             password: req.body.password
         });
-        
+        console.log(user);
         if (user) {
             req.session.save(() => {
                 req.session.user_id = user.id;
@@ -53,8 +54,7 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-//TODO: Check if logged in middleware
-router.post("/logout", (req, res) => {
+router.post("/logout", authCheck, (req, res) => {
     try {
         req.session.destroy(() => {
             res.status(200).json({ message: "Successful log out" })
@@ -65,8 +65,7 @@ router.post("/logout", (req, res) => {
     }
 });
 
-//TODO: Check if logged in middleware
-router.put("/", async (req, res) => {
+router.put("/", authCheck, async (req, res) => {
     try {
 
         var user = await User.findOne({
@@ -80,6 +79,28 @@ router.put("/", async (req, res) => {
                 res.status(200).json({ message: "Successfully updated user"});
             }
         }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json(err);
+    }
+});
+
+router.delete("/", authCheck, async (req, res) => {
+    try {
+
+        var user = await User.findOne({
+            where: {
+                id: req.session.user_id,
+            }
+        });
+        
+        var destroyed = await user.destroy();
+
+        if (destroyed) {
+            res.status(200).json({ message: "Successfully deleted comment" });
+
+        }
+
     } catch (err) {
         console.log(err);
         res.status(400).json(err);
