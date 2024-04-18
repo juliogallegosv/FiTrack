@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html lang="en-US">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
-    <title>FiTrack</title>
-  </head>
-
-
-<br>
-
-<body>
-
-    <div>
+<form>
+<div>
         <h1 class="has-text-centered title is-1">About You</h1>
     </div>
 
@@ -21,7 +8,7 @@
         <!--enter description-->
   <div class="columns is-centered is-vcentered">
     <div class="column is-half">
-      <textarea class= "textarea has-fixed-size" rows="5" placeholder="Description"></textarea> 
+      <textarea id="user-description"  class= "textarea has-fixed-size" rows="5" placeholder="Description"></textarea> 
     </div>
   </div>
 
@@ -30,7 +17,7 @@
         <!--dropdown to enter units-->
         <div class="columns is-centered is-vcentered">
           <div class="select is-info is-hovered is-normal">
-            <select class="dropdown-trigger" >
+            <select class="dropdown-trigger" id="units">
               <option value="kilometers">Kilometers</option>
               <option value="miles">Miles</option>
             </select>
@@ -41,14 +28,14 @@
         <!--enter gender-->
           <div class="columns is-centered is-vcentered">
             <div class="column is-half">
-              <input class="input is-fullwidth" placeholder="Gender"></input>
+              <input id="user-gender" class="input is-fullwidth" placeholder="Gender"></input>
             </div>
           </div>
 <br>
           <!--enter country-->
           <div class="columns is-centered is-vcentered">
             <div class="column is-half">
-              <input class="input is-fullwidth" placeholder="Country"></input>
+              <input id="user-country" class="input is-fullwidth" placeholder="Country"></input>
             </div>
         </div>
 
@@ -64,16 +51,25 @@
     <br>
     <br>
 
+    </form>
+
   <!--this should take the user back to their profile-->  
     <section>
         <div>
           <div class="columns is-centered is-vcentered">
-            <button class="button is-text">Finish Later</button>
+            <button class="about-form button is-text" href="/views/myProfile.handlebars">Finish Later</button>
           </div>
-            <link href="">
+           
         </div>
     </section>
 
 
 
-</body>
+
+
+
+
+
+    
+
+

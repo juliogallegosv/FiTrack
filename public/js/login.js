@@ -45,7 +45,7 @@ const loginFormHandler = async (event) => {
       });
   
       if (response.ok) {
-        document.location.replace('/profile');
+        document.location.replace('/myProfile');
       } else {
         alert(response.statusText);
       }
@@ -59,3 +59,4 @@ const loginFormHandler = async (event) => {
   
    //document.querySelector('#sumbitButton').addEventListener('submit', loginFormHandler) 
    document.querySelector('.login-form').addEventListener('submit', loginFormHandler);
+   document.querySelector('.signup-form').addEventListener('submit', loginFormHandler); //WE HAVE TO ADD THE CLASSES TO SIGN UP

@@ -92,21 +92,22 @@ router.get("/aboutedit", async (req, res) => {
 
 });
 
-const users = [
-    {
-      username: 'Cheese',
-    },
-    {
-      username: 'Name One',
-   }
-  ];
 
-router.get("/search", async (req, res) => {
-    
-    //const users = await User.findAll();
-    res.render("search-users")
-    return res.render('search-users', users);
-});
+  router.get('/home',  async (req, res) => {
+    try {
+      const userData = await User.findAll({
+        attributes: { exclude: ['password'] }
+      });
+  
+      const users = userData.map((user) => user.get({ plain: true }));
+  console.log(users)
+      res.render('home', {
+        users,
+      });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 
 // Update the "/" route to redirect to "/login"
 router.get("/", (req, res) => {
