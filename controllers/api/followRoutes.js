@@ -19,8 +19,6 @@ router.post("/", authCheck, async (req, res) => {
             if (created) {
                 res.status(200).json({ message: "Successfully followed"})
             }
-        } else {
-            res.status(400).json({ message: "Error: user doesn't exist" });
         }
 
     } catch (err) {
