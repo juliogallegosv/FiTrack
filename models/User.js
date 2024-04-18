@@ -103,7 +103,8 @@ User.init(
                 return data;
             }
         },
-        sequelize    
+        sequelize,
+   
     }
 
 )
