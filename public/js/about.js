@@ -8,7 +8,7 @@ const aboutFormHandler = async (event) => {
     
 
     if (description && gender && country) {
-
+      console.log(description)
       const response = await fetch(`/api/user/`, { //CHECK IF CORRECT
         method: 'PUT',
         body: JSON.stringify({ description, units, gender, country}),
@@ -19,7 +19,7 @@ const aboutFormHandler = async (event) => {
       console.log(response)
 
       if (response.ok) {
-        document.location.replace('/');
+        //document.location.replace('/');
       } else {
         alert('About section filled incorrectly');
       }
