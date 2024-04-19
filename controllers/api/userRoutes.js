@@ -38,7 +38,7 @@ router.post("/signup", async (req, res) => {
             email: req.body.email,
             password: req.body.password
         });
-        console.log(user);
+
         if (user) {
             req.session.save(() => {
                 req.session.user_id = user.id;
@@ -69,12 +69,14 @@ router.put("/", authCheck, async (req, res) => {
     try {
 
         var user = await User.findOne({
-            id: req.session.user_id
+            where: {
+                id: req.session.user_id
+            }
         });
         
         if (user && req.body) {
             user.set(req.body);
-            var saved = user.save();
+            var saved = await user.save();
             if (saved) {
                 res.status(200).json({ message: "Successfully updated user"});
             }
@@ -97,8 +99,7 @@ router.delete("/", authCheck, async (req, res) => {
         var destroyed = await user.destroy();
 
         if (destroyed) {
-            res.status(200).json({ message: "Successfully deleted comment" });
-
+            res.status(200).json({ message: "Successfully deleted user" });
         }
 
     } catch (err) {

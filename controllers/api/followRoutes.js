@@ -33,7 +33,7 @@ router.delete("/", authCheck, async (req, res) => {
         var userFollower = await UserFollower.findOne({
             where: {
                 follower_id: req.session.user_id,
-                following_id: req.body.following_id
+                following_id: req.body.follow_id
             }
         });
         
