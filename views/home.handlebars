@@ -18,11 +18,12 @@
   </div>
 </form>
 
-{{#each users as | user |}}
-  <p> {{user.username}}</p>
-      {{/each}}
-      <p>hello</p>
+{{#each latestPosts}}
+{{> postCard}}
+{{/each}}
+
 <script src="/js/search.js"></script>
+<script src="/js/post.js"></script>
 
 
 

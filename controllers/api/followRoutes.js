@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const { User, UserFollower } = require('../../models');
+const authCheck = require("../../utils/auth");
 
-//TODO: Check if logged in middleware
-router.post("/", async (req, res) => {
+router.post("/", authCheck, async (req, res) => {
     try {
 
         var user = await User.findOne({
@@ -19,8 +19,6 @@ router.post("/", async (req, res) => {
             if (created) {
                 res.status(200).json({ message: "Successfully followed"})
             }
-        } else {
-            res.status(400).json({ message: "Error: user doesn't exist" });
         }
 
     } catch (err) {
@@ -29,14 +27,13 @@ router.post("/", async (req, res) => {
     }
 });
 
-//TODO: Check if logged in middleware
-router.delete("/", async (req, res) => {
+router.delete("/", authCheck, async (req, res) => {
     try {
 
         var userFollower = await UserFollower.findOne({
             where: {
                 follower_id: req.session.user_id,
-                following_id: req.body.following_id
+                following_id: req.body.follow_id
             }
         });
         

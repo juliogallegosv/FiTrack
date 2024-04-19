@@ -1,117 +1,121 @@
 const router = require("express").Router()
-const { User, Post } = require('../models');
-
+const { User, Post, UserFollower, Comment } = require('../models');
+const authCheck = require("../utils/auth");
 
 router.get("/login", (req, res) => {
     res.render("login");
 });
 
+// Sign up route
 router.get("/signup", (req, res) => {
     res.render("signup");
 });
 
+// About you route
 router.get("/about", (req, res) => {
     res.render("about");
 });
 
-router.get("/", async (req, res) => {
-
+router.get("/", authCheck, async (req, res) => {
     var post = await Post.findAll({ raw: true });
-
-    post = post.slice(-5)
-
-    res.render("home", post);
-
+    latestPosts = post.slice(-5); // Get the 5 latest posts
+    res.render("home", {latestPosts});
 });
 
-router.get("/profile", async (req, res) => {
-
+router.get("/profile", authCheck, async (req, res) => {
     var user = await User.findOne({
+        attributes: { exclude: ['password'] },
         where: {
             id: req.session.user_id
         },
         raw: true
     });
 
-    res.render("myProfile", user);
+    var post = await Post.findAll({
+        where: {
+            user_id: req.session.user_id
+        },
+        raw: true
+    });
 
+    console.log(post);
+
+    res.render("myProfile", { user, post });
 });
 
-router.get("/create", (req, res) => {
+router.get("/create", authCheck, (req, res) => {
     res.render("create");
 });
 
-router.get("/profile/:id", async (req, res) => {
-
+router.get("/profile/:id", authCheck, async (req, res) => {
     var user = await User.findOne({
-        // include: {
-            //! IMPORTANT MASSIVE SECURITY VULNERABILITY, PRIVACY CHECK STILL NEEDS TO BE DONE AND PASSWORD HASH NOT SENT
-        // },
+        attributes: { exclude: ['password'] },
         where: {
             id: req.params.id
         },
         raw: true
     });
-    
-    var post = await Post.findAll({
+    if (user.private) {
+        res.render("profile", { private: true });
+    } else {
+        var isFollowed = await UserFollower.findOne({
+            where:{
+                follower_id: req.session.user_id,
+                following_id: req.params.id
+            },
+            raw: true
+        }) ? true : false;
+        var post = await Post.findAll({
+            where: {
+                user_id: req.params.id
+            },
+            raw: true
+        });
+        res.render("profile", { user, post, isFollowed});
+    }
+});
+
+router.get("/following", authCheck, async (req, res) => {
+    var followings = await UserFollower.findAndCountAll({
+        attributes: { exclude: ['password'] },
         where: {
-            user_id: req.params.id
+            following_id: req.session.user_id
         },
         raw: true
     });
+    res.render("following", {followings});
+});
 
-    var comment = await Comment.findAll({
+router.get("/followers", authCheck, async (req, res) => {
+    var followers = await UserFollower.findAndCountAll({
+        attributes: { exclude: ['password'] },
         where: {
-            blog_id: post.blog_id
+            follower_id: req.session.user_id
         },
         raw: true
     });
-
-    res.render("profile", {user, post, comment});
-
+    res.render("followers", {followers});
 });
 
-router.get("/following", (req, res) => {
-    res.render("following");
-});
-
-router.get("/followers", (req, res) => {
-    res.render("followers");
-});
-
-router.get("/aboutedit", async (req, res) => {
-
+router.get("/aboutedit", authCheck, async (req, res) => {
     var user = await User.findOne({
         where: {
             id: req.session.user_id
         },
         raw: true
     });
-
-    res.render("aboutEdit", user);
-
+    res.render("aboutEdit", {user});
 });
 
-
-  router.get('/home',  async (req, res) => {
-    try {
-      const userData = await User.findAll({
-        attributes: { exclude: ['password'] }
-      });
-  
-      const users = userData.map((user) => user.get({ plain: true }));
-  console.log(users)
-      res.render('home', {
-        users,
-      });
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
-
-// Update the "/" route to redirect to "/login"
-router.get("/", (req, res) => {
-    res.redirect("/login");
+router.get("/post/:id", authCheck, async (req, res) => {
+    var post = await Post.findOne({
+        where: {
+            id: req.params.id
+        },
+        raw: true
+    });
+    res.render("post", {post});
 });
 
 module.exports = router;
+
