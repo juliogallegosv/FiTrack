@@ -1,10 +1,5 @@
 const aboutFormHandler = async (event) => {
     event.preventDefault();
-  
-    const description = document.querySelector('#user-description').value.trim();
-    const units = document.querySelector('#units').value ? true : false;
-    const gender = document.querySelector('#user-gender').value.trim();
-    const country = document.querySelector('#user-country').value.trim();
 
     const title = document.querySelector("#title").value.trim();
     const sport = document.querySelector("#sport").value.trim();
