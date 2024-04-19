@@ -1,15 +1,15 @@
-const aboutFormHandler = async (event) => {
+const createFormHandler = async (event) => {
     event.preventDefault();
 
     const title = document.querySelector("#title").value.trim();
-    const sport = document.querySelector("#sport").value.trim();
+    //const sport = document.querySelector("#sport").value.trim();
     const duration = document.querySelector("#duration").value.trim();
     const distance = document.querySelector("#distance").value.trim();
 
-    if (title && sport && duration && distance) {
+    if (title && duration && distance) {
       const response = await fetch(`/api/post/`, {
         method: 'POST',
-        body: JSON.stringify({ title, sport, duration, distance}),
+        body: JSON.stringify({ title, duration, distance}),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -24,5 +24,5 @@ const aboutFormHandler = async (event) => {
   };
   
   document
-    .querySelector('#about')
-    .addEventListener('submit', aboutFormHandler);
+    .querySelector('#create')
+    .addEventListener('submit', createFormHandler);

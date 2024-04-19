@@ -19,7 +19,7 @@ const loginFormHandler = async (event) => {
 
       // If the response is ok, redirect to the home page
       if (response.ok) {
-        document.location.replace('/dashboard');
+        document.location.replace('/');
       } else {
         // If the response is not ok, display an error message
         const errorMessage = await response.text();
