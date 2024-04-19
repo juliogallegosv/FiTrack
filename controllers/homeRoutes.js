@@ -1,9 +1,35 @@
 const router = require("express").Router()
+const bcrypt = require('bcrypt');
 const { User, Post, UserFollower, Comment } = require('../models');
 const authCheck = require("../utils/auth");
 
+//login route
 router.get("/login", (req, res) => {
     res.render("login");
+});
+
+//?login post route
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Find user by email
+        const user = await User.findOne({ where: { email } });
+
+        // If user not found or password incorrect, redirect back to login page
+        if (!user || !await bcrypt.compare(password, user.password)) {
+            return res.status(401).redirect('/login');
+        }
+
+        // Set user session
+        req.session.user_id = user.id;
+
+        // Redirect to dashboard
+        res.redirect('/feed');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
 });
 
 // Sign up route
