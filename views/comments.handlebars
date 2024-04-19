@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiTrack - Comments</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <h1 class="title is-4">FiTrack</h1>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <button class="button is-text">
+                            <span class="icon">
+                                <i class="fas fa-arrow-left"></i>
+                            </span>
+                            <span>Back</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Comments Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="subtitle has-text-centered">Comments</h2>
+
+            <!-- Comments -->
+            <div class="box">
+                {{#each comments}}
+                <article class="media">
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>{{author}}</strong>
+                                <br>
+                                {{comment}}
+                            </p>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <input class="input is-small" type="text" placeholder="Add a comment...">
+                            </div>
+                            <div class="control">
+                                <button class="button is-info is-small">Add Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+
+    <!-- Handlebars Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        // Ejemplo de datos de comentarios
+        var commentData = [
+            { author: "John Doe", comment: "Great post!" },
+            { author: "Jane Smith", comment: "Keep it up!" },
+            { author: "Mike Johnson", comment: "Awesome content!" }
+        ];
+
+        // Compile Handlebars template
+        var source = document.getElementById("comment-template").innerHTML;
+        var template = Handlebars.compile(source);
+
+        // Render comments
+        var commentsHtml = "";
+        commentData.forEach(function(comment) {
+            commentsHtml += template(comment);
+        });
+        document.querySelector(".box").innerHTML = commentsHtml;
+    </script>
+
+</body>
+</html>
