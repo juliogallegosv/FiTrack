@@ -43,7 +43,26 @@ router.get("/about", (req, res) => {
 });
 
 router.get("/", authCheck, async (req, res) => {
-    var post = await Post.findAll({ raw: true });
+    var post = await Post.findAll({
+        include: {
+            model: User,
+            attributes: {
+                exclude: [
+                    "password",
+                    "email",
+                    "description",
+                    "gender",
+                    "country",
+                    "units",
+                    "private",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                include: ["username", "id", "name"]
+            }
+        },
+        raw: true 
+    });
     latestPosts = post.slice(-5); // Get the 5 latest posts
     res.render("home", {latestPosts});
 });
@@ -60,6 +79,23 @@ router.get("/profile", authCheck, async (req, res) => {
     var post = await Post.findAll({
         where: {
             user_id: req.session.user_id
+        },
+        include: {
+            model: User,
+            attributes: {
+                exclude: [
+                    "password",
+                    "email",
+                    "description",
+                    "gender",
+                    "country",
+                    "units",
+                    "private",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                include: ["username", "id", "name"]
+            }
         },
         raw: true
     });
@@ -94,6 +130,23 @@ router.get("/profile/:id", authCheck, async (req, res) => {
         var post = await Post.findAll({
             where: {
                 user_id: req.params.id
+            },
+            include: {
+                model: User,
+                attributes: {
+                    exclude: [
+                        "password",
+                        "email",
+                        "description",
+                        "gender",
+                        "country",
+                        "units",
+                        "private",
+                        "createdAt",
+                        "updatedAt"
+                    ],
+                    include: ["username", "id", "name"]
+                }
             },
             raw: true
         });
