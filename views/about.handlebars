@@ -34,18 +34,30 @@
 <br>
           <!--enter country-->
           <div class="columns is-centered is-vcentered">
-            <div class="column is-half">
-              <input id="user-country" class="input is-fullwidth" placeholder="Country"></input>
+            <div class="select is-info is-hovered is-normal">
+              <select class="dropdown-trigger" id="user-country">
+                <option value="">Select Country</option>
+                <option value="United States">USA</option>
+                <option value="Canada">CAN</option>
+                <option value="Mexico">MEX</option>
+                <option value="Brazil">BRA</option>
+                <option value="Australia">AUS</option>
+                <option value="United Kingdom">GBR</option>
+                <option value="France">FRA</option>
+                <option value="Germany">DEU</option>
+                <option value="Japan">JPN</option>
+                <option value="China">CHN</option>
+              </select>
             </div>
-        </div>
+          </div>
 
 
         <br>
 <!--save info button-->
     <section>
-        <div class="columns is-centered is-vcentered">
-            <button class="button is-medium is-info">Add my info</button>
-        </div>
+      <div class="columns is-centered is-vcentered">
+        <button id="add-info" class="button is-medium is-info" disabled>Add my info</button>
+      </div>
     </section>
 
     <br>
@@ -63,14 +75,4 @@
         </div>
     </section>
   <script src="/js/about.js"></script>
-
-
-
-
-
-
-
-
-    
-
 

@@ -3,12 +3,23 @@ const bcrypt = require('bcrypt');
 const { User, Post, UserFollower, Comment } = require('../models');
 const authCheck = require("../utils/auth");
 
+// Home route
+router.get("/", authCheck, async (req, res) => {
+    if (req.session.user_id) {
+        // If user is logged in, redirect to feed
+        res.redirect('/feed');
+    } else {
+        // If user is not logged in, render login page
+        res.render("login");
+    }
+});
+
 //login route
 router.get("/login", (req, res) => {
     res.render("login");
 });
 
-//?login post route
+//* login post route
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -24,7 +35,7 @@ router.post("/login", async (req, res) => {
         // Set user session
         req.session.user_id = user.id;
 
-        // Redirect to dashboard
+        // Redirect to feed
         res.redirect('/feed');
     } catch (error) {
         console.error(error);
@@ -42,12 +53,14 @@ router.get("/about", (req, res) => {
     res.render("about");
 });
 
-router.get("/", authCheck, async (req, res) => {
+// Feed route (Dashboard)
+router.get("/feed", authCheck, async (req, res) => {
     var post = await Post.findAll({ raw: true });
     latestPosts = post.slice(-5); // Get the 5 latest posts
-    res.render("home", {latestPosts});
+    res.render("feed", {latestPosts});
 });
 
+// Profile route
 router.get("/profile", authCheck, async (req, res) => {
     var user = await User.findOne({
         attributes: { exclude: ['password'] },
@@ -57,22 +70,22 @@ router.get("/profile", authCheck, async (req, res) => {
         raw: true
     });
 
-    var post = await Post.findAll({
+    var posts = await Post.findAll({
         where: {
             user_id: req.session.user_id
         },
         raw: true
     });
 
-    console.log(post);
-
-    res.render("myProfile", { user, post });
+    res.render("myProfile", { user, posts });
 });
 
+// Add Post route
 router.get("/create", authCheck, (req, res) => {
     res.render("create");
 });
 
+// View other user's profile route
 router.get("/profile/:id", authCheck, async (req, res) => {
     var user = await User.findOne({
         attributes: { exclude: ['password'] },
@@ -91,16 +104,17 @@ router.get("/profile/:id", authCheck, async (req, res) => {
             },
             raw: true
         }) ? true : false;
-        var post = await Post.findAll({
+        var posts = await Post.findAll({
             where: {
                 user_id: req.params.id
             },
             raw: true
         });
-        res.render("profile", { user, post, isFollowed});
+        res.render("profile", { user, posts, isFollowed});
     }
 });
 
+// View following route
 router.get("/following", authCheck, async (req, res) => {
     var followings = await UserFollower.findAndCountAll({
         attributes: { exclude: ['password'] },
@@ -112,6 +126,7 @@ router.get("/following", authCheck, async (req, res) => {
     res.render("following", {followings});
 });
 
+// View followers route
 router.get("/followers", authCheck, async (req, res) => {
     var followers = await UserFollower.findAndCountAll({
         attributes: { exclude: ['password'] },
@@ -123,7 +138,8 @@ router.get("/followers", authCheck, async (req, res) => {
     res.render("followers", {followers});
 });
 
-router.get("/aboutedit", authCheck, async (req, res) => {
+// Edit about you route
+router.get("/aboutEdit", authCheck, async (req, res) => {
     var user = await User.findOne({
         where: {
             id: req.session.user_id
@@ -133,6 +149,7 @@ router.get("/aboutedit", authCheck, async (req, res) => {
     res.render("aboutEdit", {user});
 });
 
+// View post route
 router.get("/post/:id", authCheck, async (req, res) => {
     var post = await Post.findOne({
         where: {
