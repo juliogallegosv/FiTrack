@@ -45,11 +45,11 @@
             </div>
             <div class="content">
                 <h2>Users Following You</h2>
-                {{#if followersList}}
+                {{#if followers}}
                     <ul>
-                        {{#each followersList}}
-                            <li>{{this}}</li>
-                        {{/each}}
+                    {{#each followers.rows}}
+                    {{> followerCard}}
+                    {{/each}}
                     </ul>
                 {{else}}
                     <p>mmm no one yet 😕</p>

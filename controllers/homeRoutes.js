@@ -158,22 +158,48 @@ router.get("/following", authCheck, async (req, res) => {
     var followings = await UserFollower.findAndCountAll({
         attributes: { exclude: ['password'] },
         where: {
-            following_id: req.session.user_id
+            follower_id: req.session.user_id
         },
         raw: true
     });
+    for (var i = 0; i < followings.rows.length; i++) {
+        let user = await User.findOne({
+            attributes: { exclude: ['password'] },
+            where: {
+                id: followings.rows[i].following_id
+            },
+            raw: true
+        });
+        followings.rows[i]["username"] = user.username;
+    }
+    console.log(followings)
+    
     res.render("following", {followings});
+
 });
 
 router.get("/followers", authCheck, async (req, res) => {
     var followers = await UserFollower.findAndCountAll({
         attributes: { exclude: ['password'] },
         where: {
-            follower_id: req.session.user_id
+            following_id: req.session.user_id
         },
         raw: true
     });
+    for (var i = 0; i < followers.rows.length; i++) {
+        let user = await User.findOne({
+            attributes: { exclude: ['password'] },
+            where: {
+                id: followers.rows[i].follower_id
+            },
+            raw: true
+        });
+        followers.rows[i]["username"] = user.username;
+    }
+    console.log(followers)
+    
     res.render("followers", {followers});
+
 });
 
 router.get("/aboutedit", authCheck, async (req, res) => {
