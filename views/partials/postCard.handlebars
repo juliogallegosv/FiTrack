@@ -4,6 +4,13 @@
             <strong>{{title}}</strong> <small>{{formatTime createdAt}}</small>
             <br />
             {{content}}
+            {{sport}} {{distance}}km {{duration}}min
+            {{formatTime date}}
+            {{location}}
+            {{!-- all of the posts User info is included in the post object; however, it can only be accessed in block brackets --}}
+            @{{[User.username]}}
         </p>
     </div>
 </div>
+
+<script src="/js/post.js" data-post="{{id}}"></script>

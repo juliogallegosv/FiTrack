@@ -43,7 +43,26 @@ router.get("/about", (req, res) => {
 });
 
 router.get("/", authCheck, async (req, res) => {
-    var post = await Post.findAll({ raw: true });
+    var post = await Post.findAll({
+        include: {
+            model: User,
+            attributes: {
+                exclude: [
+                    "password",
+                    "email",
+                    "description",
+                    "gender",
+                    "country",
+                    "units",
+                    "private",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                include: ["username", "id", "name"]
+            }
+        },
+        raw: true 
+    });
     latestPosts = post.slice(-5); // Get the 5 latest posts
     res.render("home", {latestPosts});
 });
@@ -60,6 +79,23 @@ router.get("/profile", authCheck, async (req, res) => {
     var post = await Post.findAll({
         where: {
             user_id: req.session.user_id
+        },
+        include: {
+            model: User,
+            attributes: {
+                exclude: [
+                    "password",
+                    "email",
+                    "description",
+                    "gender",
+                    "country",
+                    "units",
+                    "private",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                include: ["username", "id", "name"]
+            }
         },
         raw: true
     });
@@ -95,6 +131,23 @@ router.get("/profile/:id", authCheck, async (req, res) => {
             where: {
                 user_id: req.params.id
             },
+            include: {
+                model: User,
+                attributes: {
+                    exclude: [
+                        "password",
+                        "email",
+                        "description",
+                        "gender",
+                        "country",
+                        "units",
+                        "private",
+                        "createdAt",
+                        "updatedAt"
+                    ],
+                    include: ["username", "id", "name"]
+                }
+            },
             raw: true
         });
         res.render("profile", { user, post, isFollowed});
@@ -105,22 +158,48 @@ router.get("/following", authCheck, async (req, res) => {
     var followings = await UserFollower.findAndCountAll({
         attributes: { exclude: ['password'] },
         where: {
-            following_id: req.session.user_id
+            follower_id: req.session.user_id
         },
         raw: true
     });
+    for (var i = 0; i < followings.rows.length; i++) {
+        let user = await User.findOne({
+            attributes: { exclude: ['password'] },
+            where: {
+                id: followings.rows[i].following_id
+            },
+            raw: true
+        });
+        followings.rows[i]["username"] = user.username;
+    }
+    console.log(followings)
+    
     res.render("following", {followings});
+
 });
 
 router.get("/followers", authCheck, async (req, res) => {
     var followers = await UserFollower.findAndCountAll({
         attributes: { exclude: ['password'] },
         where: {
-            follower_id: req.session.user_id
+            following_id: req.session.user_id
         },
         raw: true
     });
+    for (var i = 0; i < followers.rows.length; i++) {
+        let user = await User.findOne({
+            attributes: { exclude: ['password'] },
+            where: {
+                id: followers.rows[i].follower_id
+            },
+            raw: true
+        });
+        followers.rows[i]["username"] = user.username;
+    }
+    console.log(followers)
+    
     res.render("followers", {followers});
+
 });
 
 router.get("/aboutedit", authCheck, async (req, res) => {

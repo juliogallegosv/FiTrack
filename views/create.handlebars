@@ -1,40 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FiTrack - Workout</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
-</head>
-<body>
-
-    <!-- Navbar -->
-    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="#">
-                <h1 class="title is-4">FiTrack</h1>
-            </a>
-        </div>
-        <div class="navbar-menu">
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <button class="button is-text">
-                            <span class="icon">
-                                <i class="fas fa-arrow-left"></i>
-                            </span>
-                            <span>Back</span>
-                        </button>
-                    </div>
+<!-- Navbar -->
+<nav class="navbar is-info" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+            <h0 class="title is-4">FiTrack</h0>
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <button class="button is-text">
+                        <span class="icon">
+                            <i class="fas fa-arrow-left"></i>
+                        </span>
+                        <span>Back</span>
+                    </button>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <!-- Workout Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="subtitle has-text-centered">Track today's workout</h2>
+<!-- Workout Section -->
+<section class="section">
+    <div class="container">
+        <h2 class="subtitle has-text-centered">Track today's workout</h2>
 
 
 <br>
@@ -51,7 +41,7 @@
 
 
             <!-- Workout Menu -->
-            {{!-- <div class="dropdown is-hoverable">
+            <div class="dropdown is-hoverable">
                 <div class="dropdown-trigger">
                     <button class="button" aria-haspopup="true" aria-controls="workout-menu">
                         <span>Workout</span>
@@ -67,7 +57,7 @@
                         <a href="#" class="dropdown-item">Swimming</a>
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
             <!-- Time Inputs -->
             <div class="columns is-centered is-vcentered">
@@ -115,6 +105,9 @@
                 </div>
             </div>
 
+            {{!-- ! Won't work until a private switch is added here and to the create.js file --}}
+            {{!-- TODO: Add the rest of the inputs: content, date (of event), location, and private --}}
+
             <!-- Post Button -->
             <div class="columns is-centered is-vcentered">
                 <div class="column is-half">
@@ -128,5 +121,4 @@
         </div>
     </section>
 </form>
-</body>
-</html>
+<script src="/js/create.js"></script>

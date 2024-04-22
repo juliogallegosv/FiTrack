@@ -31,15 +31,16 @@
     <section class="section">
         <div class="container">
             <div class="level">
+                {{!-- TODO: Add a button called edit profile that routes to /aboutEdit --}}
                 <div class="level-left">
                     <h1 class="title">Profile</h1>
                 </div>
-                {{!-- FUTURE IMPLEMENTATION <div class="level-right">
+                <div class="level-right">
                     <div class="buttons">
-                        <a href="/followers" class="button is-info">Followers ({{user.followersCount}})</a>
-                        <a href="/following" class="button is-info">Following ({{user.followingCount}})</a>
+                        <a href="/followers" class="button is-info">Followers</a>
+                        <a href="/following" class="button is-info">Following</a>
                     </div>
-                </div> --}}
+                </div>
             </div>
             <div class="content">
                 <h2>{{user.name}}</h2>
@@ -58,7 +59,6 @@
             </div> --}}
 
             <!-- Submit Post Button -->
-{{!-- !REROUTE USER TO THE /create PAGE --}}
             <div class="field">
                 <div class="control">
                     <button id="createBtn" class="button is-info">Create Post</button>
@@ -77,7 +77,7 @@
 
             <!-- Logout Button -->
             <div class="buttons is-centered">
-                <button class="button is-danger">Logout</button>
+                <button id="logoutBtn" class="button is-danger">Logout</button>
             </div>
         </div>
     </section>
@@ -86,4 +86,3 @@
 </html>
 
 <script src="/js/myProfile.js"></script>
-<script src="/js/post.js"></script>
