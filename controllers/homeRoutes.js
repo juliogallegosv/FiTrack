@@ -1,30 +1,41 @@
-const router = require("express").Router()
+const router = require("express").Router();
 const bcrypt = require('bcrypt');
 const { User, Post, UserFollower, Comment } = require('../models');
 const authCheck = require("../utils/auth");
 
-//login route
+// Home route
+router.get("/", authCheck, async (req, res) => {
+    if (req.session.user_id) {
+        // If user is logged in, redirect to feed
+        res.redirect('/feed');
+    } else {
+        // If user is not logged in, render login page
+        res.render("login");
+    }
+});
+
+// Login route
 router.get("/login", (req, res) => {
     res.render("login");
 });
 
-// //?login post route
-// router.post("/login", async (req, res) => {
-//     const { email, password } = req.body;
+//* login post route
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
 
-//     try {
-//         // Find user by email
-//         const user = await User.findOne({ where: { email } });
+    try {
+        // Find user by email
+        const user = await User.findOne({ where: { email } });
 
-//         // If user not found or password incorrect, redirect back to login page
-//         if (!user || !await bcrypt.compare(password, user.password)) {
-//             return res.status(401).redirect('/login');
-//         }
+        // If user not found or password incorrect, redirect back to login page
+        if (!user || !await bcrypt.compare(password, user.password)) {
+            return res.status(401).redirect('/login');
+        }
 
-//         // Set user session
-//         req.session.user_id = user.id;
+        // Set user session
+        req.session.user_id = user.id;
 
-//         // Redirect to dashboard
+//         // Redirect to feed
 //         res.redirect('/');
 //     } catch (error) {
 //         console.error(error);
@@ -38,197 +49,117 @@ router.get("/signup", (req, res) => {
 });
 
 // About you route
-router.get("/about", (req, res) => {
-    res.render("about");
+router.get("/about", authCheck, async (req, res) => {
+    // Retrieve user details and render about page
+    try {
+        const user = await User.findOne({ where: { id: req.session.user_id } });
+        res.render("about", { user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
 });
 
-router.get("/", authCheck, async (req, res) => {
-    var post = await Post.findAll({
-        include: {
-            model: User,
-            attributes: {
-                exclude: [
-                    "password",
-                    "email",
-                    "description",
-                    "gender",
-                    "country",
-                    "units",
-                    "private",
-                    "createdAt",
-                    "updatedAt"
-                ],
-                include: ["username", "id", "name"]
-            }
-        },
-        raw: true 
-    });
-    latestPosts = post.slice(-5); // Get the 5 latest posts
-    res.render("home", {latestPosts});
+// Dashboard route
+router.get("/feed", authCheck, async (req, res) => {
+    // Retrieve latest posts and render feed page
+    try {
+        const posts = await Post.findAll({
+            include: {
+                model: User,
+                attributes: { exclude: ['password'] }
+            },
+            order: [['createdAt', 'DESC']],
+            limit: 5
+        });
+        res.render("feed", { posts });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
 });
 
+// Profile route
 router.get("/profile", authCheck, async (req, res) => {
-    var user = await User.findOne({
-        attributes: { exclude: ['password'] },
-        where: {
-            id: req.session.user_id
-        },
-        raw: true
-    });
-
-    var post = await Post.findAll({
-        where: {
-            user_id: req.session.user_id
-        },
-        include: {
-            model: User,
-            attributes: {
-                exclude: [
-                    "password",
-                    "email",
-                    "description",
-                    "gender",
-                    "country",
-                    "units",
-                    "private",
-                    "createdAt",
-                    "updatedAt"
-                ],
-                include: ["username", "id", "name"]
-            }
-        },
-        raw: true
-    });
-
-    console.log(post);
-
-    res.render("myProfile", { user, post });
+    // Retrieve user profile and posts and render profile page
+    try {
+        const user = await User.findOne({ where: { id: req.session.user_id } });
+        const posts = await Post.findAll({ where: { user_id: req.session.user_id } });
+        res.render("myProfile", { user, posts });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
 });
 
+// Add Post route
 router.get("/create", authCheck, (req, res) => {
     res.render("create");
 });
 
+// View other user's profile route
 router.get("/profile/:id", authCheck, async (req, res) => {
-    var user = await User.findOne({
-        attributes: { exclude: ['password'] },
-        where: {
-            id: req.params.id
-        },
-        raw: true
-    });
-    if (user.private) {
-        res.render("profile", { private: true });
-    } else {
-        var isFollowed = await UserFollower.findOne({
-            where:{
-                follower_id: req.session.user_id,
-                following_id: req.params.id
-            },
-            raw: true
-        }) ? true : false;
-        var post = await Post.findAll({
-            where: {
-                user_id: req.params.id
-            },
-            include: {
-                model: User,
-                attributes: {
-                    exclude: [
-                        "password",
-                        "email",
-                        "description",
-                        "gender",
-                        "country",
-                        "units",
-                        "private",
-                        "createdAt",
-                        "updatedAt"
-                    ],
-                    include: ["username", "id", "name"]
-                }
-            },
-            raw: true
-        });
-        res.render("profile", { user, post, isFollowed});
+    // Retrieve user profile and posts and render profile page
+    try {
+        const user = await User.findOne({ where: { id: req.params.id } });
+        const posts = await Post.findAll({ where: { user_id: req.params.id } });
+        res.render("profile", { user, posts });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
     }
 });
 
+// View following route
 router.get("/following", authCheck, async (req, res) => {
-    var followings = await UserFollower.findAndCountAll({
-        attributes: { exclude: ['password'] },
-        where: {
-            follower_id: req.session.user_id
-        },
-        raw: true
-    });
-    for (var i = 0; i < followings.rows.length; i++) {
-        let user = await User.findOne({
-            attributes: { exclude: ['password'] },
-            where: {
-                id: followings.rows[i].following_id
-            },
-            raw: true
-        });
-        followings.rows[i]["username"] = user.username;
+    // Retrieve users followed by the current user and render following page
+    try {
+        const followings = await UserFollower.findAndCountAll({ where: { follower_id: req.session.user_id } });
+        res.render("following", { followings });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
     }
-    console.log(followings)
-    
-    res.render("following", {followings});
-
 });
 
+// View followers route
 router.get("/followers", authCheck, async (req, res) => {
-    var followers = await UserFollower.findAndCountAll({
-        attributes: { exclude: ['password'] },
-        where: {
-            following_id: req.session.user_id
-        },
-        raw: true
-    });
-    for (var i = 0; i < followers.rows.length; i++) {
-        let user = await User.findOne({
-            attributes: { exclude: ['password'] },
-            where: {
-                id: followers.rows[i].follower_id
-            },
-            raw: true
-        });
-        followers.rows[i]["username"] = user.username;
+    // Retrieve users following the current user and render followers page
+    try {
+        const followers = await UserFollower.findAndCountAll({ where: { following_id: req.session.user_id } });
+        res.render("followers", { followers });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
     }
-    console.log(followers)
-    
-    res.render("followers", {followers});
-
 });
 
-router.get("/aboutedit", authCheck, async (req, res) => {
-    var user = await User.findOne({
-        where: {
-            id: req.session.user_id
-        },
-        raw: true
-    });
-    res.render("aboutEdit", {user});
+// Edit about you route
+router.get("/aboutEdit", authCheck, async (req, res) => {
+    // Retrieve user details and render edit about page
+    try {
+        const user = await User.findOne({ where: { id: req.session.user_id } });
+        res.render("aboutEdit", { user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
 });
 
+// View post route
 router.get("/post/:id", authCheck, async (req, res) => {
-    var post = await Post.findOne({
-        where: {
-            id: req.params.id
-        },
-        raw: true
-    });
-    if (post){
-        var comment = await Comment.findAll({
-            where: {
-                post_id: post.id
-            }, 
-            
-            raw: true 
-        });
-        console.log(comment)
-        res.render("post", {post, comment});
+    // Retrieve post details and comments and render post page
+    try {
+        const post = await Post.findOne({ where: { id: req.params.id } });
+        if (post) {
+            const comments = await Comment.findAll({ where: { post_id: post.id } });
+            res.render("post", { post, comments });
+        } else {
+            res.status(404).send('Post not found');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
     }
 });
 
