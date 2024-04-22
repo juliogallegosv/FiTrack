@@ -8,29 +8,29 @@ router.get("/login", (req, res) => {
     res.render("login");
 });
 
-//?login post route
-router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
+// //?login post route
+// router.post("/login", async (req, res) => {
+//     const { email, password } = req.body;
 
-    try {
-        // Find user by email
-        const user = await User.findOne({ where: { email } });
+//     try {
+//         // Find user by email
+//         const user = await User.findOne({ where: { email } });
 
-        // If user not found or password incorrect, redirect back to login page
-        if (!user || !await bcrypt.compare(password, user.password)) {
-            return res.status(401).redirect('/login');
-        }
+//         // If user not found or password incorrect, redirect back to login page
+//         if (!user || !await bcrypt.compare(password, user.password)) {
+//             return res.status(401).redirect('/login');
+//         }
 
-        // Set user session
-        req.session.user_id = user.id;
+//         // Set user session
+//         req.session.user_id = user.id;
 
-        // Redirect to dashboard
-        res.redirect('/feed');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
-    }
-});
+//         // Redirect to dashboard
+//         res.redirect('/');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Server error');
+//     }
+// });
 
 // Sign up route
 router.get("/signup", (req, res) => {
@@ -140,7 +140,17 @@ router.get("/post/:id", authCheck, async (req, res) => {
         },
         raw: true
     });
-    res.render("post", {post});
+    if (post){
+        var comment = await Comment.findAll({
+            where: {
+                post_id: post.id
+            }, 
+            
+            raw: true 
+        });
+        console.log(comment)
+        res.render("post", {post, comment});
+    }
 });
 
 module.exports = router;
