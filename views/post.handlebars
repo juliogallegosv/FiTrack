@@ -31,6 +31,17 @@
         </div>
     </nav>
 
+
+    <div class="media-content cell has-background-dark">
+        <div class="content">
+            <p>
+                <strong>{{post.title}}</strong> <small>{{formatTime post.createdAt}}</small>
+                <br />
+                {{post.content}}
+            </p>
+        </div>
+    </div>
+
     <!-- Comments Section -->
     <section class="section">
         <div class="container">
@@ -38,27 +49,17 @@
 
             <!-- Comments -->
             <div class="box">
-                {{#each comments}}
-                <article class="media">
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>{{author}}</strong>
-                                <br>
-                                {{comment}}
-                            </p>
-                        </div>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <input class="input is-small" type="text" placeholder="Add a comment...">
-                            </div>
-                            <div class="control">
-                                <button class="button is-info is-small">Add Comment</button>
-                            </div>
-                        </div>
-                    </div>
-                </article>
+                {{#each comment}}
+                {{> commentCard}}
                 {{/each}}
+                <div class="field is-grouped">
+                    <div class="control">
+                        <input class="input is-small" type="text" placeholder="Add a comment...">
+                    </div>
+                    <div class="control">
+                        <button class="button is-info is-small">Add Comment</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

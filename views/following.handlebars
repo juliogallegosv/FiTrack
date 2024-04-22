@@ -35,7 +35,7 @@
     <section class="section">
         <div class="container">
             <div class="buttons is-centered">
-                <button class="button is-info is-large">Following ({{user.followingCount}})</button>
+                <button class="button is-info is-large">Following ({{followings.count}})</button>
                 <button class="button is-info is-large">Followers ({{user.followersCount}})</button>
             </div>
             <div class="field">
@@ -46,8 +46,8 @@
             <div class="content">
                 <h2>Users You're Following</h2>
                 <ul>
-                    {{#each followingUsers}}
-                        <li>{{this}}</li>
+                    {{#each following.rows}}
+                    {{> followingCard}}
                     {{/each}}
                 </ul>
             </div>
