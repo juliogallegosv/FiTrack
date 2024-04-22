@@ -31,7 +31,7 @@
     <section class="section">
         <div class="container">
             <div class="level">
-                {{!-- TODO: Add a button called edit profile that routes to /aboutEdit --}}
+                {{!-- Add a button called edit profile that routes to /aboutEdit --}}
                 <div class="level-left">
                     <h1 class="title">Profile</h1>
                 </div>
@@ -42,6 +42,11 @@
                     </div>
                 </div>
             </div>
+            <div class="field">
+                <div class="control">
+                    <button id="aboutYouBtn" class="button is-info">Edit Profile</button>
+                </div>
+            </div>
             <div class="content">
                 <h2>{{user.name}}</h2>
                 <p>Username: <span>{{user.username}}</span></p>
@@ -50,13 +55,6 @@
                 <p>Description: {{user.description}}</p>
             </div>
             
-            <!-- Add Post Section -->
-            {{!-- <div class="field">
-                <label class="label">Add Post</label>
-                <div class="control">
-                    <textarea class="textarea" placeholder="Enter your post here"></textarea>
-                </div>
-            </div> --}}
 
             <!-- Submit Post Button -->
             <div class="field">
@@ -69,7 +67,7 @@
             <div class="field">
                 <label class="label">Recent Posts:</label>
                 <div class="content">
-                    {{#each post}}
+                    {{#each posts}}
                     {{> postCard}}
                     {{/each}}
                 </div>

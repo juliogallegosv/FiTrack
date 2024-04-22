@@ -83,7 +83,7 @@ User.init(
             validate: {
                 len: {
                     args: [2, 3],
-                    msg: "Please select a country length between 2 and 3 characters long"
+                    msg: "Please select a country length between 2 and 3 characters long (USA, MXN, CAN, etc)"
                 },
             }
         },

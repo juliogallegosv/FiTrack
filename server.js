@@ -81,6 +81,18 @@ app.post('/send-email', (req, res) => {
   });
 });
 
+// Middleware to check authentication
+function authCheck(req, res, next) {
+    if (req.session.user) {
+        // User is authenticated, proceed with the request
+        next();
+    } else {
+        // User is not authenticated, redirect to login page or send an error response
+        res.redirect("/login");
+        // or res.status(401).send("Unauthorized");
+    }
+}
+
 // Set the port for the server to listen on
 const PORT = process.env.PORT || 3001;
 

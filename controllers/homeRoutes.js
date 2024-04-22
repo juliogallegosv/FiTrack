@@ -19,7 +19,7 @@ router.get("/login", (req, res) => {
     res.render("login");
 });
 
-//* login post route
+//* Login post route
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -35,13 +35,13 @@ router.post("/login", async (req, res) => {
         // Set user session
         req.session.user_id = user.id;
 
-//         // Redirect to feed
-//         res.redirect('/');
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('Server error');
-//     }
-// });
+        // Redirect to feed
+        res.redirect('/feed');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
 
 // Sign up route
 router.get("/signup", (req, res) => {
@@ -50,15 +50,16 @@ router.get("/signup", (req, res) => {
 
 // About you route
 router.get("/about", authCheck, async (req, res) => {
-    // Retrieve user details and render about page
     try {
         const user = await User.findOne({ where: { id: req.session.user_id } });
+        console.log(user); // Log user object to console
         res.render("about", { user });
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
     }
 });
+
 
 // Dashboard route
 router.get("/feed", authCheck, async (req, res) => {
@@ -164,4 +165,3 @@ router.get("/post/:id", authCheck, async (req, res) => {
 });
 
 module.exports = router;
-

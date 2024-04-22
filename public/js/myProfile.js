@@ -18,3 +18,12 @@ document.querySelector(`#logoutBtn`).addEventListener('click', async (event) => 
         document.location = '/login';
     }
 });
+
+// Function to handle click event on the signup button
+const aboutEdit = (event) => {
+    event.preventDefault();
+    document.location.replace('/aboutedit');
+  };
+
+  // Add event listener for signup button click
+document.querySelector('#aboutYouBtn').addEventListener('click', aboutEdit);
